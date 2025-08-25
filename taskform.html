@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Task</title>
+  <style>
+    body {
+      background: #f5f6fa;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+    .nav1 {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #6c63ff;
+      padding: 15px 30px;
+      color: white;
+      box-sizing: border-box;
+    }
+    .button1 {
+      background-color: #fff;
+      color: #6c63ff;
+      padding: 8px 16px;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+      font-size: 20px;
+    }
+    .button1:hover {
+      background-color: #6c63ff;
+      color: #fff;
+    }
+    .nav1 .logo{
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    #task {
+      width: 400px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
+      margin: 30px auto;
+    }
+
+    #task input, #task textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+
+    #task button {
+      padding: 8px 15px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+    #task button[type="submit"] {
+      background-color: #6c63ff;
+      color: white;
+    }
+    #task button[type="button"] {
+      background-color: #ccc;
+      color: #333;
+    }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav class="nav1">
+      <div class="logo">Task Manager</div>
+      <button class="button1" onclick="window.location.href='index.html'">← Back</button>
+    </nav>
+  </header>
+
+  <div id="task">
+    <form id="mytask">
+      <label>Task Name:</label><br>
+      <input type="text" id="taskname" required><br>
+
+      <label>Description:</label><br>
+      <textarea id="description" required></textarea><br>
+
+      <label>Due Date:</label><br>
+      <input type="date" id="duedate" required><br>
+
+      <button type="submit">Save</button>
+      <button type="button" onclick="window.location.href='index.html'">Cancel</button>
+    </form>
+  </div>
+
+  <script>
+  window.onload = function() {
+    let editTask = JSON.parse(localStorage.getItem("editTask"));
+    if(editTask) {
+      document.getElementById("taskname").value = editTask.name;
+      document.getElementById("description").value = editTask.desc;
+      document.getElementById("duedate").value = editTask.date;
+    }
+  }
+
+  document.getElementById("mytask").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    let name = document.getElementById("taskname").value.trim();
+    let desc = document.getElementById("description").value.trim();
+    let date = document.getElementById("duedate").value;
+
+    if(!name || !desc || !date){
+      alert("Please fill all fields");
+      return;
+    }
+
+    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+    let editIndex = localStorage.getItem("editIndex");
+
+    if(editIndex !== null) {
+      tasks[editIndex] = {name, desc, date};
+      localStorage.removeItem("editIndex");
+      localStorage.removeItem("editTask");
+    } else {
+      tasks.push({name, desc, date});
+    }
+
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+    window.location.href = "index.html";
+  });
+</script>
+
+</body>
+</html>

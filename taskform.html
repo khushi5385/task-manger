@@ -11,6 +11,7 @@
       margin: 0;
       padding: 0;
     }
+
     .nav1 {
       width: 100%;
       display: flex;
@@ -21,6 +22,7 @@
       color: white;
       box-sizing: border-box;
     }
+
     .button1 {
       background-color: #fff;
       color: #6c63ff;
@@ -35,9 +37,24 @@
       background-color: #6c63ff;
       color: #fff;
     }
-    .nav1 .logo{
+
+    .nav1 .logo {
       font-size: 28px;
       font-weight: bold;
+    }
+
+    /* Responsive fix for phones */
+    @media (max-width: 600px) {
+      .nav1 {
+        padding: 10px 15px;
+      }
+      .nav1 .logo {
+        font-size: 22px;
+      }
+      .button1 {
+        font-size: 18px;
+        padding: 6px 12px;
+      }
     }
 
     #task {
@@ -75,7 +92,6 @@
       background-color: #ccc;
       color: #333;
     }
-
   </style>
 </head>
 <body>
@@ -83,7 +99,8 @@
   <header>
     <nav class="nav1">
       <div class="logo">Task Manager</div>
-      <button class="button1" onclick="window.location.href='index.html'">← Back</button>
+      <!-- Changed Back button to just arrow for mobile consistency -->
+      <button class="button1" onclick="window.location.href='index.html'">←</button>
     </nav>
   </header>
 
@@ -104,42 +121,42 @@
   </div>
 
   <script>
-  window.onload = function() {
-    let editTask = JSON.parse(localStorage.getItem("editTask"));
-    if(editTask) {
-      document.getElementById("taskname").value = editTask.name;
-      document.getElementById("description").value = editTask.desc;
-      document.getElementById("duedate").value = editTask.date;
-    }
-  }
-
-  document.getElementById("mytask").addEventListener("submit", function(e){
-    e.preventDefault();
-
-    let name = document.getElementById("taskname").value.trim();
-    let desc = document.getElementById("description").value.trim();
-    let date = document.getElementById("duedate").value;
-
-    if(!name || !desc || !date){
-      alert("Please fill all fields");
-      return;
+    window.onload = function() {
+      let editTask = JSON.parse(localStorage.getItem("editTask"));
+      if(editTask) {
+        document.getElementById("taskname").value = editTask.name;
+        document.getElementById("description").value = editTask.desc;
+        document.getElementById("duedate").value = editTask.date;
+      }
     }
 
-    let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
-    let editIndex = localStorage.getItem("editIndex");
+    document.getElementById("mytask").addEventListener("submit", function(e){
+      e.preventDefault();
 
-    if(editIndex !== null) {
-      tasks[editIndex] = {name, desc, date};
-      localStorage.removeItem("editIndex");
-      localStorage.removeItem("editTask");
-    } else {
-      tasks.push({name, desc, date});
-    }
+      let name = document.getElementById("taskname").value.trim();
+      let desc = document.getElementById("description").value.trim();
+      let date = document.getElementById("duedate").value;
 
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-    window.location.href = "index.html";
-  });
-</script>
+      if(!name || !desc || !date){
+        alert("Please fill all fields");
+        return;
+      }
+
+      let tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+      let editIndex = localStorage.getItem("editIndex");
+
+      if(editIndex !== null) {
+        tasks[editIndex] = {name, desc, date};
+        localStorage.removeItem("editIndex");
+        localStorage.removeItem("editTask");
+      } else {
+        tasks.push({name, desc, date});
+      }
+
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      window.location.href = "index.html";
+    });
+  </script>
 
 </body>
 </html>
